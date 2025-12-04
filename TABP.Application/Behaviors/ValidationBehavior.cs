@@ -1,35 +1,38 @@
 using FluentValidation;
 using MediatR;
 
-public class ValidationBehavior<TRequest, TResponse>
-    : IPipelineBehavior<TRequest, TResponse>
+namespace TABP.Application.Behaviors
 {
-    private readonly IEnumerable<IValidator<TRequest>> _validators;
-
-    public ValidationBehavior(IEnumerable<IValidator<TRequest>> validators)
+    public class ValidationBehavior<TRequest, TResponse>
+        : IPipelineBehavior<TRequest, TResponse>
     {
-        _validators = validators;
-    }
+        private readonly IEnumerable<IValidator<TRequest>> _validators;
 
-    public async Task<TResponse> Handle(
-        TRequest request,
-        RequestHandlerDelegate<TResponse> next,
-        CancellationToken cancellationToken)
-    {
-        if (_validators.Any())
+        public ValidationBehavior(IEnumerable<IValidator<TRequest>> validators)
         {
-            var context = new ValidationContext<TRequest>(request);
-
-            var failures = _validators
-                .Select(v => v.Validate(context))
-                .SelectMany(v => v.Errors)
-                .Where(x => x != null)
-                .ToList();
-
-            if (failures.Any())
-                throw new FluentValidation.ValidationException(failures);
+            _validators = validators;
         }
 
-        return await next();
+        public async Task<TResponse> Handle(
+            TRequest request,
+            RequestHandlerDelegate<TResponse> next,
+            CancellationToken cancellationToken)
+        {
+            if (_validators.Any())
+            {
+                var context = new ValidationContext<TRequest>(request);
+
+                var failures = _validators
+                    .Select(v => v.Validate(context))
+                    .SelectMany(v => v.Errors)
+                    .Where(x => x != null)
+                    .ToList();
+
+                if (failures.Any())
+                    throw new FluentValidation.ValidationException(failures);
+            }
+
+            return await next();
+        }
     }
 }

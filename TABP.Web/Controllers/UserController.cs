@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Mvc;
-using System.IdentityModel.Tokens.Jwt;
 using AutoMapper;
 using MediatR;
 using TABP.Application.Users.Register;
@@ -25,7 +24,9 @@ namespace TABP.Web.Controllers
         public async Task<IActionResult> SignUp(UserRequest request, CancellationToken cancellationToken)
         {
             var rigesterCommand = _mapper.Map<UserRequest, UserCommand>(request);
+
             await _sender.Send(rigesterCommand, cancellationToken);
+
             return NoContent();
         }
     }

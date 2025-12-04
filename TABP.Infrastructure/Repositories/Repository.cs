@@ -1,5 +1,5 @@
 using TABP.Domain.Entities;
-using TABP.Domain.Interfaces;
+using TABP.Domain.Interfaces.Repositories;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 

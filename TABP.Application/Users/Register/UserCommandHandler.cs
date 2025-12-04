@@ -2,7 +2,7 @@ using AutoMapper;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using TABP.Domain.Entities;
-using TABP.Domain.Interfaces;
+using TABP.Domain.Interfaces.Repositories;
 using TABP.Domain.Exceptions;
 using TABP.Domain.Messages;
 
@@ -34,6 +34,9 @@ namespace TABP.Application.Users.Register
 
             var user = _mapper.Map<User>(request);
             user.HashedPassword = _passwordHasher.HashPassword(user, request.Password);
+
+            user.CreatedAt = DateTimeOffset.UtcNow;
+            user.ModifiedAt = DateTimeOffset.UtcNow;
 
             Guid newId = await _userRepository.AddAsync(user, cancellationToken);
             await _userRepository.SaveChangesAsync(cancellationToken);

@@ -1,7 +1,7 @@
 ﻿using System.Linq.Expressions;
 using TABP.Domain.Entities;
 
-namespace TABP.Domain.Interfaces
+namespace TABP.Domain.Interfaces.Repositories
 {
     public interface IRepository<T> where T : EntityBase
     {

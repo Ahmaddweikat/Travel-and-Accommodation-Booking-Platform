@@ -1,6 +1,6 @@
 using TABP.Domain.Entities;
 
-namespace TABP.Domain.Interfaces
+namespace TABP.Domain.Interfaces.Repositories
 {
     public interface IUserRepository : IRepository<User>
     {
